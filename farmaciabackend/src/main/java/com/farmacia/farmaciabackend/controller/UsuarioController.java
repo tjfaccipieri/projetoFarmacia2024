@@ -29,9 +29,14 @@ public class UsuarioController {
         return usuarioRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+    }
+
+    @PostMapping("/logar")
+    public ResponseEntity<Usuario> logar(@Valid @RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
