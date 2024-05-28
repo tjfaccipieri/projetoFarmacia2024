@@ -63,7 +63,7 @@ function Home() {
     <>
       <div className="container mx-auto mt-8">
         <div className="text-xl text-center">Todos os produtos</div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {produtos.map((produto, index) => (
             <CardProdutos key={index} produto={produto} />
           ))}
