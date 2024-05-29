@@ -29,6 +29,7 @@ public class Produto {
     @Size(min = 3, max = 2000)
     private String descricao;
 
+    @Size(max = 5000)
     private String foto;
 
     @NotNull
@@ -38,5 +39,9 @@ public class Produto {
     @ManyToOne
     @JsonIgnoreProperties("produto")
     private Categoria categoria;
+
+    @ManyToOne
+    @JsonIgnoreProperties("produto")
+    private Usuario usuario;
 
 }
