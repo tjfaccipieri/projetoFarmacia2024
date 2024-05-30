@@ -1,15 +1,22 @@
 package com.farmacia.farmaciabackend.service;
 
 import com.farmacia.farmaciabackend.model.Usuario;
+import com.farmacia.farmaciabackend.model.UsuarioLogin;
 import com.farmacia.farmaciabackend.repository.UsuarioRepository;
 import com.farmacia.farmaciabackend.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+
+import static java.sql.DriverManager.println;
 
 @Service
 public class UsuarioService {
@@ -26,9 +33,42 @@ public class UsuarioService {
         if(usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Usuário já existe!", null);
         }
+        usuario.setSenha(criptografarSenha(usuario.getSenha()));
 
-        return null;
+        return Optional.of(usuarioRepository.save(usuario));
+    }
+
+    public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin){
+        var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha());
+
+        Authentication authentication = authenticationManager.authenticate(credenciais);
+        if(authentication.isAuthenticated()){
+            Optional<Usuario> usuario = usuarioRepository.findByUsuario(usuarioLogin.get().getUsuario());
+            if (usuario.isPresent()){
+                usuarioLogin.get().setId(usuario.get().getId());
+                usuarioLogin.get().setNome(usuario.get().getNome());
+                usuarioLogin.get().setFoto(usuario.get().getFoto());
+                usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUsuario()));
+                usuarioLogin.get().getSenha();
+
+                return usuarioLogin;
+            }
+        }
+        return Optional.empty();
     }
 
 
+    private boolean compararSenhas(String senhaDigitada, String senhaDB) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(senhaDigitada, senhaDB);
+    }
+
+    private String criptografarSenha(String senha) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(senha);
+    }
+
+    private String gerarToken(String usuario){
+        return "Bearer " + jwtService.generateToken(usuario);
+    }
 }

@@ -1,7 +1,9 @@
 package com.farmacia.farmaciabackend.controller;
 
 import com.farmacia.farmaciabackend.model.Usuario;
+import com.farmacia.farmaciabackend.model.UsuarioLogin;
 import com.farmacia.farmaciabackend.repository.UsuarioRepository;
+import com.farmacia.farmaciabackend.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     public ResponseEntity<List<Usuario>> getAll(){
         return ResponseEntity.ok(usuarioRepository.findAll());
@@ -31,12 +36,15 @@ public class UsuarioController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Usuario> cadastrar(@Valid @RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+        return usuarioService.cadastrarUsuario(usuario).map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @PostMapping("/logar")
-    public ResponseEntity<Usuario> logar(@Valid @RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<UsuarioLogin> logarUsuario(@RequestBody Optional<UsuarioLogin> user){
+        return usuarioService.autenticarUsuario(user)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     @DeleteMapping("/{id}")
