@@ -12,7 +12,7 @@ interface CardProdutosProps {
 
 function CardProdutos({ produto }: CardProdutosProps) {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg m-2 mx-auto">
+    <div className="w-80 rounded overflow-hidden shadow-lg m-2 mx-auto">
       <img
         className="w-full h-64 object-cover"
         src={produto.foto}
