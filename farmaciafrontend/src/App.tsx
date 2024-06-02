@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import { AuthProvider } from './contexts/AuthContext'
+import CadastroCategoria from './components/categorias/CadastroCategoria'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
+          <Route path="/categorias" element={<CadastroCategoria />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

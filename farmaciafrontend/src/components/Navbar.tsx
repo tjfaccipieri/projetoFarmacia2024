@@ -6,7 +6,7 @@ function Navbar() {
       <div className="flex items-center space-x-4">
         <div className="font-bold text-xl"><Link to='/'>Logo</Link></div>
         <div>Produtos</div>
-        <div>Categorias</div>
+        <Link to='/categorias'>Categorias</Link>
       </div>
       <div>
         <Link to='/login' 

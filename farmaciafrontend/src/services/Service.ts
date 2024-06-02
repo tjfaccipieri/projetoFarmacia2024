@@ -15,3 +15,7 @@ export const getWithoutToken = async (url: string, setData: Function) => {
   setData(resp.data)
 }
 
+export const post = async(url: string, data: object, setData: Function, headers: object) => {
+  const resp = await api.post(url, data, headers)
+  setData(resp.data)
+}
