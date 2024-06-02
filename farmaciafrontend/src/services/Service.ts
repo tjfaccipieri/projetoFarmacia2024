@@ -9,3 +9,9 @@ export const auth = async (url: string, data: object, setData: Function) => {
   console.log(resp);
   setData(resp.data)
 }
+
+export const getWithoutToken = async (url: string, setData: Function) => {
+  const resp = await api.get(url)
+  setData(resp.data)
+}
+

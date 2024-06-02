@@ -1,15 +1,22 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { User } from '../models/User';
 import { UserLogin } from '../models/UserLogin';
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../services/Service';
 
 function Login() {
+
+  const navigate = useNavigate();
+
   const [userCad, setUserCad] = useState<User>({} as User);
-  const [userLogin, setUserLogin] = useState<UserLogin>({} as UserLogin);
+  const [user, setUser] = useState<UserLogin>({} as UserLogin);
+
+  const { userLogin, login } = useContext(AuthContext);
 
   function getFieldsLogin(event: ChangeEvent<HTMLInputElement>) {
-    setUserLogin({
-      ...userLogin,
+    setUser({
+      ...user,
       [event.target.name]: event.target.value,
     });
   }
@@ -21,23 +28,35 @@ function Login() {
     });
   }
 
-  async function login(event: ChangeEvent<HTMLFormElement>) {
+  function handleLogin(event: ChangeEvent<HTMLFormElement>){
+    event.preventDefault();
+    login(user);
+  }
+
+  async function cadastrarUser(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await auth('/usuarios/logar', userLogin, setUserLogin)
-      alert('logou')
-      console.log({userLogin})
+      console.table(userCad)
+      await auth('/usuarios/cadastrar', userCad, setUserCad)
+      alert('Cadastrado com sucesso')
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
+
+  useEffect(() => {
+    if(userLogin.token !== ''){
+      console.log('entrou context')
+      navigate('/')
+    }
+  }, [userLogin])
 
   return (
     <div>
       <main className="flex container mx-auto mt-8 gap-12 items-center">
-        <div className="w-1/2 h-1/2">
+        <div className="w-1/2 h-1/2" id='login'>
           <h2 className="font-bold text-2xl text-center">Logar</h2>
-          <form className="flex flex-col gap-4" onSubmit={login}>
+          <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <section className="flex flex-col gap-2">
               <label htmlFor="email">Email</label>
               <input
@@ -61,15 +80,14 @@ function Login() {
             <button
               type="submit"
               className="bg-green-500 text-white rounded-md p-2 hover:bg-green-700 w-10/12 mx-auto"
-              onClick={() => console.log(userLogin)}
             >
               Entrar
             </button>
           </form>
         </div>
-        <div className="w-1/2 h-1/2">
+        <div className="w-1/2 h-1/2" id='cadastro'>
           <h2 className="font-bold text-2xl text-center">Cadastrar</h2>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={cadastrarUser}>
             <section className="flex flex-col gap-2">
               <label htmlFor="nome">Nome</label>
               <input
@@ -84,7 +102,7 @@ function Login() {
               <label htmlFor="email">Email</label>
               <input
                 type="email"
-                name="email"
+                name="usuario"
                 id="email"
                 className="border-2 border-gray-300 rounded-md p-2"
                 onChange={(event) => getFieldsCad(event)}
@@ -114,7 +132,6 @@ function Login() {
               type="submit"
               disabled={userCad.senha === null}
               className='bg-blue-500 text-white rounded-md p-2 hover:bg-blue-700 w-10/12 mx-auto disabled:bg-gray-400'
-              onClick={() => console.log(userCad)}
             >
               Cadastrar
             </button>
