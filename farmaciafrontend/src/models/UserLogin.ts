@@ -1,6 +1,6 @@
 export interface UserLogin {
   nome: string,
-  email: string,
+  usuario: string,
   senha: string,
   foto: string,
   token: string

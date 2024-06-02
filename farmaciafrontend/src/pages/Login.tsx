@@ -1,10 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 import { User } from '../models/User';
 import { UserLogin } from '../models/UserLogin';
+import { auth } from '../services/Service';
 
 function Login() {
-  const [userLogin, setUserLogin] = useState<UserLogin>({} as UserLogin);
   const [userCad, setUserCad] = useState<User>({} as User);
+  const [userLogin, setUserLogin] = useState<UserLogin>({} as UserLogin);
 
   function getFieldsLogin(event: ChangeEvent<HTMLInputElement>) {
     setUserLogin({
@@ -20,17 +21,28 @@ function Login() {
     });
   }
 
+  async function login(event: ChangeEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      await auth('/usuarios/logar', userLogin, setUserLogin)
+      alert('logou')
+      console.log({userLogin})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div>
       <main className="flex container mx-auto mt-8 gap-12 items-center">
         <div className="w-1/2 h-1/2">
           <h2 className="font-bold text-2xl text-center">Logar</h2>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={login}>
             <section className="flex flex-col gap-2">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
-                name="email"
+                name="usuario"
                 id="loginemail"
                 className="border-2 border-gray-300 rounded-md p-2"
                 onChange={(event) => getFieldsLogin(event)}
