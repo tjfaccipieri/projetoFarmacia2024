@@ -7,7 +7,7 @@ export interface Produtos {
   preco: number;
   descricao: string;
   foto: string;
-  usuario: User;
-  categoria: Categoria;
+  usuario: User | null;
+  categoria: Categoria | null;
 }
 
