@@ -1,12 +1,13 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useState } from 'react'
 import { Categoria } from '../../models/Categoria';
-import { getWithoutToken, post } from '../../services/Service';
 import { AuthContext } from '../../contexts/AuthContext';
+import { post } from '../../services/Service';
+import ListaCategorias from './ListaCategorias';
 
 function CadastroCategoria() {
 
   const [categoria, setCategoria] = useState<Categoria>({} as Categoria)
-  const [categorias, setCategorias] = useState<Categoria[]>([])
+  
 
   const {userLogin} = useContext(AuthContext)
 
@@ -31,13 +32,7 @@ function CadastroCategoria() {
     }
   }
 
-  async function buscarCategorias() {
-    await getWithoutToken('/categorias', setCategorias)
-  }
-
-  useEffect(() => {
-    buscarCategorias()
-  }, [])
+  
 
   return (
     <>
@@ -49,13 +44,9 @@ function CadastroCategoria() {
             <button type="submit" className='bg-indigo-400 hover:bg-indigo-600 w-1/2 mx-auto px-4 py-2 rounded font-bold text-white uppercase'>Cadastrar</button>
           </form>
 
-          <hr />
+          <hr className='w-full' />
 
-          <section>
-            {categorias.map(categoria => (
-              <p>{categoria.categoria}</p>
-            ))}
-          </section>
+          <ListaCategorias />
       </main>
     </>
   )
