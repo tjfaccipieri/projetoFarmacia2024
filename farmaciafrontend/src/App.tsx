@@ -6,11 +6,16 @@ import Login from './pages/Login'
 import { AuthProvider } from './contexts/AuthContext'
 import CadastroCategoria from './components/categorias/CadastroCategoria'
 import CadastroProdutos from './components/produtos/CadastroProdutos'
+import ProdutoUnico from './components/produtos/ProdutoUnico'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import Carrinho from './components/Carrinho'
 
 function App() {
 
   return (
     <AuthProvider>
+      <ToastContainer />  
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -18,6 +23,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/categorias" element={<CadastroCategoria />} />
           <Route path="/produtos" element={<CadastroProdutos />} />
+          <Route path="/produtos/:id" element={<ProdutoUnico />} />
+          <Route path="/carrinho" element={<Carrinho />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

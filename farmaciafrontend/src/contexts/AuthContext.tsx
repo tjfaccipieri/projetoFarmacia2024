@@ -1,7 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import { createContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import { UserLogin } from '../models/UserLogin';
 import { auth } from '../services/Service';
+import { Produtos } from '../models/Produtos';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -10,6 +12,8 @@ interface AuthProviderProps {
 interface AuthContextProps {
   userLogin: UserLogin;
   login(user: UserLogin): Promise<void>;
+  carrinho: Produtos[];
+  addCarrinho (produto: Produtos): void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -24,11 +28,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     token: '',
   });
 
+  const [carrinho, setCarrinho] = useState<Produtos[]>([])
+
   async function login(user: UserLogin) {
     try {
       await auth('/usuarios/logar', user, setUserLogin);
-      alert('logou');
-      console.table(userLogin);
+      toast.success(`Usuario logado`, {
+        position: 'top-right',
+        autoClose: 2500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: 'colored',
+        progress: undefined,
+      });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -47,8 +61,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  
+
+  function addCarrinho(produto: Produtos){
+    setCarrinho((currentItems: Produtos[]) => {
+      return[...currentItems, produto]
+    })
+    console.log(carrinho);
+  }
+
   return (
-    <AuthContext.Provider value={{ userLogin, login }}>
+    <AuthContext.Provider value={{ userLogin, login, carrinho, addCarrinho }}>
       {children}
     </AuthContext.Provider>
   );

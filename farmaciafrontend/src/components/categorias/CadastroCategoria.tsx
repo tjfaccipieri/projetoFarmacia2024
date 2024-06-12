@@ -65,6 +65,8 @@ function CadastroCategoria() {
         <hr className="w-full" />
 
         <ListaCategorias />
+
+        
       </main>
     </>
   );

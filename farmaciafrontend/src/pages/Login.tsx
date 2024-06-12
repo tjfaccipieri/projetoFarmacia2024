@@ -1,12 +1,11 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 import { User } from '../models/User';
 import { UserLogin } from '../models/UserLogin';
-import { AuthContext } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import { auth } from '../services/Service';
 
 function Login() {
-
   const navigate = useNavigate();
 
   const [userCad, setUserCad] = useState<User>({} as User);
@@ -28,7 +27,7 @@ function Login() {
     });
   }
 
-  function handleLogin(event: ChangeEvent<HTMLFormElement>){
+  function handleLogin(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     login(user);
   }
@@ -36,25 +35,24 @@ function Login() {
   async function cadastrarUser(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      console.table(userCad)
-      await auth('/usuarios/cadastrar', userCad, setUserCad)
-      alert('Cadastrado com sucesso')
+      console.table(userCad);
+      await auth('/usuarios/cadastrar', userCad, setUserCad);
+      alert('Cadastrado com sucesso');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   useEffect(() => {
-    if(userLogin.token !== ''){
-      console.log('entrou context')
-      navigate('/')
+    if (userLogin.token !== '') {
+      navigate('/');
     }
-  }, [userLogin])
+  }, [userLogin]);
 
   return (
     <div>
       <main className="flex container mx-auto mt-8 gap-12 items-center">
-        <div className="w-1/2 h-1/2" id='login'>
+        <div className="w-1/2 h-1/2" id="login">
           <h2 className="font-bold text-2xl text-center">Logar</h2>
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <section className="flex flex-col gap-2">
@@ -85,7 +83,7 @@ function Login() {
             </button>
           </form>
         </div>
-        <div className="w-1/2 h-1/2" id='cadastro'>
+        <div className="w-1/2 h-1/2" id="cadastro">
           <h2 className="font-bold text-2xl text-center">Cadastrar</h2>
           <form className="flex flex-col gap-4" onSubmit={cadastrarUser}>
             <section className="flex flex-col gap-2">
@@ -131,7 +129,7 @@ function Login() {
             <button
               type="submit"
               disabled={userCad.senha === null}
-              className='bg-blue-500 text-white rounded-md p-2 hover:bg-blue-700 w-10/12 mx-auto disabled:bg-gray-400'
+              className="bg-blue-500 text-white rounded-md p-2 hover:bg-blue-700 w-10/12 mx-auto disabled:bg-gray-400"
             >
               Cadastrar
             </button>

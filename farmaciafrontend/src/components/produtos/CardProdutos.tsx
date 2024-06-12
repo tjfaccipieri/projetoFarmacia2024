@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Produtos } from '../../models/Produtos';
 
 interface CardProdutosProps {
@@ -26,6 +27,9 @@ function CardProdutos({ produto }: CardProdutosProps) {
             currency: 'BRL',
           }).format(produto.preco)}
         </span>
+      </div>
+      <div className='w-full flex justify-center mb-4'>
+        <Link to={`/produtos/${produto.id}`} className='w-10/12'><button className='rounded bg-purple-400 w-full text-white font-bold py-2'>Detalhes</button></Link>
       </div>
     </div>
   );

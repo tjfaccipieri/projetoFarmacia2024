@@ -4,16 +4,15 @@ import { Produtos } from '../models/Produtos';
 import { getWithoutToken } from '../services/Service';
 
 function Home() {
-
-  const [produtos, setProdutos] = useState<Produtos[]>([])
+  const [produtos, setProdutos] = useState<Produtos[]>([]);
 
   async function getProdutos() {
-    await getWithoutToken('/produtos', setProdutos)
+    await getWithoutToken('/produtos', setProdutos);
   }
 
   useEffect(() => {
-    getProdutos()
-  }, [])
+    getProdutos();
+  }, []);
 
   return (
     <>
