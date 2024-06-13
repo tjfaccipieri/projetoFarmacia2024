@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import { createContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { Produtos } from '../models/Produtos';
 import { UserLogin } from '../models/UserLogin';
 import { auth } from '../services/Service';
-import { Produtos } from '../models/Produtos';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -13,7 +13,8 @@ interface AuthContextProps {
   userLogin: UserLogin;
   login(user: UserLogin): Promise<void>;
   carrinho: Produtos[];
-  addCarrinho (produto: Produtos): void;
+  addCarrinho(produto: Produtos): void;
+  logout(): void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -28,8 +29,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     token: '',
   });
 
-  const [carrinho, setCarrinho] = useState<Produtos[]>([])
+  const [carrinho, setCarrinho] = useState<Produtos[]>([]);
 
+  /**
+   * The function `login` is an asynchronous function in TypeScript React that handles user login, displaying success messages and handling different error scenarios.
+   * @param {UserLogin} user - The `user` parameter in the `login` function is of type `UserLogin`, which likely contains the user's login credentials such as username and password. It is used to authenticate the user when logging in.
+   * @returns If the login is successful, a success toast message is displayed. If there is an error during the login process, either an alert message for invalid user credentials or lack of permission is shown. If there is an unexpected error, it is logged to the console.
+   */
   async function login(user: UserLogin) {
     try {
       await auth('/usuarios/logar', user, setUserLogin);
@@ -61,17 +67,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  
+  /**
+   * The `logout` function resets the user login information and logs a message indicating the user has logged out.
+   */
+  function logout() {
+    setUserLogin({
+      id: '',
+      nome: '',
+      usuario: '',
+      senha: '',
+      foto: '',
+      token: '',
+    });
+    console.log('saiu');
+  }
 
-  function addCarrinho(produto: Produtos){
+  /**
+   * The function `addCarrinho` adds a product to the shopping cart and logs the updated cart items.
+   * @param {Produtos} produto - The parameter `produto` in the `addCarrinho` function is of type `Produtos`, which likely represents an object or data structure that contains information about a product.
+   */
+  function addCarrinho(produto: Produtos) {
     setCarrinho((currentItems: Produtos[]) => {
-      return[...currentItems, produto]
-    })
+      return [...currentItems, produto];
+    });
     console.log(carrinho);
   }
 
+  /* The `return` statement in the `AuthProvider` component is returning the JSX code that defines the structure of the component. In this case, it is returning a `Provider` component from the `AuthContext` with specific values passed as the `value` prop. */
   return (
-    <AuthContext.Provider value={{ userLogin, login, carrinho, addCarrinho }}>
+    <AuthContext.Provider
+      value={{ userLogin, login, carrinho, addCarrinho, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
