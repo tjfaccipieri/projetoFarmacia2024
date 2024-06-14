@@ -12,7 +12,7 @@ function Carrinho() {
       {carrinho.map(item => (
         <div className='border border-purple-700 rounded px-4 py-2 flex items-center justify-between'>
         <div className=' flex gap-4 items-center'>
-          <img src={fusca} className='w-16 rounded border-2 border-purple-800' alt="" />
+          <img src={item.foto || fusca} className='w-16 rounded border-2 border-purple-800' alt="" />
           <p className='font-semibold uppercase text-purple-900'>{item.nome}</p>
           <div className="flex ml-4 items-center  border-2 px-4 py-2 rounded-full border-purple-800 gap-4">
             <RiSubtractFill className='hover:bg-purple-200 rounded-full  '  />
