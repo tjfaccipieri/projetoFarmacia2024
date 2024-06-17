@@ -82,13 +82,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     console.log('saiu');
   }
 
-  /**
-   * The function `addCarrinho` adds a product to the shopping cart and logs the updated cart items.
-   * @param {Produtos} produto - The parameter `produto` in the `addCarrinho` function is of type `Produtos`, which likely represents an object or data structure that contains information about a product.
-   */
+  
   function addCarrinho(produto: Produtos) {
     setCarrinho((currentItems: Produtos[]) => {
-      return [...currentItems, produto];
+      const existingItem = currentItems.find((item) => item.id === produto.id);
+      if (existingItem) {
+        return currentItems.map((item) => item.id === produto.id ? { ...produto, qtd: item.qtd! + 1 } : item);
+      } else {
+        return [...currentItems, { ...produto, qtd: 1 }];
+      }
     });
     console.log(carrinho);
   }

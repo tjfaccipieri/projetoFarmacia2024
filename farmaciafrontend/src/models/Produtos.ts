@@ -9,5 +9,6 @@ export interface Produtos {
   foto: string;
   usuario: User | null;
   categoria: Categoria | null;
+  qtd?: number
 }
 

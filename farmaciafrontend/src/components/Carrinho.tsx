@@ -16,7 +16,7 @@ function Carrinho() {
           <p className='font-semibold uppercase text-purple-900'>{item.nome}</p>
           <div className="flex ml-4 items-center  border-2 px-4 py-2 rounded-full border-purple-800 gap-4">
             <RiSubtractFill className='hover:bg-purple-200 rounded-full  '  />
-            <span>1</span>
+            <span>{item.qtd}</span>
             <RiAddFill className='hover:bg-purple-200 rounded-full  '  />
           </div>
         </div>
