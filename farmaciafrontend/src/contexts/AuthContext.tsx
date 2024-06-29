@@ -83,6 +83,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   
+  /**
+   * The function `addCarrinho` adds a product to the shopping cart, updating the quantity if the product already exists in the cart.
+   * @param {Produtos} produto - The parameter `produto` represents an object of type `Produtos`, which likely contains information about a product such as its `id`, `name`, `price`, and possibly other properties. In the `addCarrinho` function, this parameter is used to add a product to a shopping cart
+   */
   function addCarrinho(produto: Produtos) {
     setCarrinho((currentItems: Produtos[]) => {
       const existingItem = currentItems.find((item) => item.id === produto.id);

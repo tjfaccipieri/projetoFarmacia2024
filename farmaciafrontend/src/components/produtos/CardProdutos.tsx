@@ -13,17 +13,18 @@ function CardProdutos({ produto }: CardProdutosProps) {
   const {addCarrinho} = useContext(AuthContext)
 
   return (
-    <div className="w-80 rounded-lg overflow-hidden shadow-lg m-2 mx-auto border-gray-200 border-2 hover:shadow-xl cursor-pointer">
+    <div className="w-64 rounded-lg overflow-hidden shadow-lg m-2 mx-auto border-gray-200 border-2 hover:shadow-xl">
       <img
-        className="w-full h-64 object-cover mt-4"
+        className="w-full h-32 object-contain mt-4"
         src={produto.foto || "https://radio93fm.com.br/wp-content/uploads/2019/02/produto.png"}
         alt={produto.nome}
       />
-      <div className="px-6 py-4 text-center">
-        <div className="font-bold text-xl mb-2">{produto.nome}</div>
-        <p className="text-gray-700 text-lg font-semibold">{produto.descricao}</p>
+      <div className="px-6 py-4 text-center h-24 mb-2">
+        <div className="font-bold text-lg mb-2">{produto.nome}</div>
+        <p className="text-gray-700 font-semibold truncate line-clamp-2 text-wrap">{produto.descricao}</p>
       </div>
-      <div className="px-4 pt-4 pb-2 flex justify-between items-center mb-2">
+      <div className='mt-auto'>
+      <div className="px-4 pt-4 pb-2 flex justify-between items-center mb-2 ">
         <span className="inline-block bg-indigo-200 rounded-full px-4 py-1 text-sm font-bold text-gray-700">
           {produto.categoria?.categoria}
         </span>
@@ -37,6 +38,7 @@ function CardProdutos({ produto }: CardProdutosProps) {
       <div className='w-full flex justify-evenly mb-4 gap-8 px-4'>
         <Link to={`/produtos/${produto.id}`} className='w-10/12'><button className='rounded bg-purple-400 w-full text-white font-bold py-2'>Detalhes</button></Link>
         <button onClick={() => addCarrinho(produto)} className='rounded bg-purple-400 text-white font-bold py-2 px-4'><RiShoppingCart2Fill /></button>
+      </div>
       </div>
     </div>
   );
