@@ -2,7 +2,8 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Categoria } from '../../models/Categoria';
 import { Produtos } from '../../models/Produtos';
-import { getWithoutToken, post } from '../../services/Service';
+import { getWithoutToken, post, put } from '../../services/Service';
+import ListaProdutosAdm from './ListaProdutosAdm';
 
 function CadastroProdutos() {
   const { userLogin } = useContext(AuthContext);
@@ -15,15 +16,15 @@ function CadastroProdutos() {
       ...produto,
       [event.target.name]: event.target.value,
       categoria: categoria,
-      usuario: userLogin
+      usuario: userLogin,
     });
   }
-  
+
   useEffect(() => {
     setProduto({
       ...produto,
       categoria: categoria,
-      usuario: userLogin
+      usuario: userLogin,
     });
   }, [categoria]);
 
@@ -31,24 +32,47 @@ function CadastroProdutos() {
     event.preventDefault();
     console.table(produto);
 
-    try {
-      await post('/produtos', produto, setProduto, {
-        headers: {
-          Authorization: userLogin.token,
-        },
-      });
-      alert(`O produto ${produto.nome} foi cadastrado com sucesso`)
-      setProduto({
-        descricao: '',
-        foto: '',
-        nome: '',
-        preco: 0,
-        id: 0,
-        categoria: null,
-        usuario: null
-      })
-    } catch (error) {
-      console.log(error);
+    if (produto.id === 0) {
+      try {
+        await post('/produtos', produto, setProduto, {
+          headers: {
+            Authorization: userLogin.token,
+          },
+        });
+        alert(`O produto ${produto.nome} foi cadastrado com sucesso`);
+        setProduto({
+          descricao: '',
+          foto: '',
+          nome: '',
+          preco: 0,
+          id: 0,
+          categoria: null,
+          usuario: null,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        console.log(produto);
+        await put('/produtos', produto, setProduto, {
+          headers: {
+            Authorization: userLogin.token,
+          },
+        });
+        alert(`O produto ${produto.nome} foi cadastrado com sucesso`);
+        setProduto({
+          descricao: '',
+          foto: '',
+          nome: '',
+          preco: 0,
+          id: 0,
+          categoria: null,
+          usuario: null,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -61,6 +85,10 @@ function CadastroProdutos() {
   useEffect(() => {
     buscarCategorias();
   }, []);
+
+  async function getProdutoUnico(id: number) {
+    await getWithoutToken(`/produtos/${id}`, setProduto);
+  }
 
   return (
     <>
@@ -106,13 +134,17 @@ function CadastroProdutos() {
             className="border-2 border-purple-800 px-4 py-2 rounded"
             name="categoria"
             id="categoria"
-            onChange={event => getWithoutToken(`/categorias/${event.target.value}`, setCategoria)}
+            onChange={(event) =>
+              getWithoutToken(`/categorias/${event.target.value}`, setCategoria)
+            }
           >
             <option value="" selected hidden>
               Selecione uma categoria
             </option>
             {categorias.map((categoria) => (
-              <option key={categoria.id} value={categoria.id}>{categoria.categoria}</option>
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.categoria}
+              </option>
             ))}
           </select>
 
@@ -123,6 +155,8 @@ function CadastroProdutos() {
             Cadastrar Produto
           </button>
         </form>
+
+        <ListaProdutosAdm getProduto={getProdutoUnico} />
       </main>
     </>
   );

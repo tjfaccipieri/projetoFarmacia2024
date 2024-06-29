@@ -14,6 +14,7 @@ function CardProdutos({ produto }: CardProdutosProps) {
 
   return (
     <div className="w-64 rounded-lg overflow-hidden shadow-lg m-2 mx-auto border-gray-200 border-2 hover:shadow-xl">
+      <span>{produto.categoria?.categoria}</span>
       <img
         className="w-full h-32 object-contain mt-4"
         src={produto.foto || "https://radio93fm.com.br/wp-content/uploads/2019/02/produto.png"}

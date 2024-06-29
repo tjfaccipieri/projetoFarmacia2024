@@ -10,6 +10,7 @@ import ProdutoUnico from './components/produtos/ProdutoUnico'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Carrinho from './components/Carrinho'
+import ListaProdutosAdm from './components/produtos/ListaProdutosAdm'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/produtos" element={<CadastroProdutos />} />
           <Route path="/produtos/:id" element={<ProdutoUnico />} />
           <Route path="/carrinho" element={<Carrinho />} />
+          <Route path="/listaprodutosadm" element={<ListaProdutosAdm />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

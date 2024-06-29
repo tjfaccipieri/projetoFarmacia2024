@@ -15,13 +15,12 @@ export const getWithoutToken = async (url: string, setData: Function) => {
   setData(resp.data)
 }
 
-interface ResponseData {
-  id: number;
-  name: string;
-  // outros campos conforme necessário
-}
-
 export const post = async(url: string, data: object, setData: Function, headers: object) => {
   const resp = await api.post(url, data, headers)
+  setData(resp.data)
+}
+
+export const put = async(url: string, data: object, setData: Function, headers: object) => {
+  const resp = await api.put(url, data, headers)
   setData(resp.data)
 }

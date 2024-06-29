@@ -68,7 +68,7 @@ public class ProdutoController {
 
         return produtoRepository.findById(id)
                 .map(resposta -> {
-                    produtoRepository.deleteById(id);
+                    produtoRepository.m(id);
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                 })
                 .orElse(ResponseEntity.notFound().build());
